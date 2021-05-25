@@ -1,10 +1,26 @@
-// Every component needs a smoke + snapshot test.
-// Critical Business Logic needs tests too. Use your judgement for this, but make sure you cover core functionality. Examples include: the ability to enter data, submit a form, and have the desired outcome appear in the DOM.
-
-
 import { render } from '@testing-library/react';
 import NewBoxForm from './NewBoxForm';
 
 test('if smoking', () => {
   render(<NewBoxForm />);
+});
+
+it('matches snapshot', () => {
+  const { asFragment } = render(<NewBoxForm />);
+  expect(asFragment()).toMatchSnapshot();
+});
+
+it('has labels & 1 button', () => {
+  render(<NewBoxForm />);
+  expect(screen.getByLabelText("Width:")).toBeVisible();
+  expect(screen.getByLabelText("Height:")).toBeVisible();
+  expect(screen.getByLabelText("Background Color:")).toBeVisible();
+  expect(screen.getByRole("button", {name: "Create New Box"})).toBeVisible();
+});
+
+it('has input fields', () => {
+  render(<NewBoxForm />);
+  expect(screen.getByRole("input", {name: "width"})).toBeVisible();
+  expect(screen.getByRole("input", {name: "height"})).toBeVisible();
+  expect(screen.getByRole("input", {name: "bgColor"})).toBeVisible();
 });
